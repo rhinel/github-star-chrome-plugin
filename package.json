@@ -1,0 +1,7 @@
+{
+  "name": "github-star-chrome-plugin",
+  "version": "1.0.0",
+  "main": "index.html",
+  "author": "rhinel <rhinelkc@hotmail.com>",
+  "license": "MIT"
+}
