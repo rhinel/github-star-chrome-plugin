@@ -1,0 +1,30 @@
+{
+  "manifest_version": 2,
+  "name": "GitHub Star Manager",
+  "version": "1.0.0",
+  "description": "管理GitHub Star的Chrome拓展",
+  "icons": {
+    "16": "image/fluidicon.png",
+    "32": "image/fluidicon.png",
+    "48": "image/fluidicon.png",
+    "128": "image/fluidicon.png"
+  },
+  "background": {
+    "persistent": false,
+    "scripts": [
+      "tmp/token.js",
+      "script/background.js"
+    ]
+  },
+  "browser_action": {
+		"default_icon": "image/fluidicon.png",
+		"default_title": "GitHub Star",
+		"default_popup": "html/popup.html"
+	},
+  "homepage_url": "https://github.com/rhinel/github-star-chrome-plugin",
+  "options_ui": {
+    "page": "html/options.html",
+		"chrome_style": true
+  },
+  "permissions": ["storage"]
+}
