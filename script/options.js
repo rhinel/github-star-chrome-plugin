@@ -1,9 +1,13 @@
 (async function() {
   // 获取token
-  const { access_token } = await window.getStorage('access_token');
+  const { user_name, access_token } = await window.getStorage([
+    'user_name', 'access_token'
+  ]);
 
   // input
+  const user_name_input = document.querySelector('#user_name');
   const access_token_input = document.querySelector('#access_token');
+  if (user_name) user_name_input.value = user_name;
   if (access_token) access_token_input.value = access_token;
 
   // save button
@@ -16,6 +20,7 @@
       }
 
       await window.setStorage({
+        user_name: user_name_input.value,
         access_token: access_token_input.value
       });
 

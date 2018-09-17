@@ -4,10 +4,12 @@ let gettingStar = false;
 
 async function getFetchStarred(_page, _data) {
   // token page url
-  const { access_token } = await window.getStorage('access_token');
+  const { user_name, access_token } = await window.getStorage([
+    'user_name', 'access_token'
+  ]);
   const page = _page || 1;
   const baseUrl =
-    'https://api.github.com/users/rhinel/starred'
+    `https://api.github.com/users/${user_name}/starred`
     + `?access_token=${access_token}&page=${page}`;
 
   // 请求

@@ -6,21 +6,20 @@
 async function checkStatus() {
   // 获取存储status
   const statusStorage = await window.getStorage([
-    'access_token',
-    'getStarrdTime',
-    'intervalTime',
+    'user_name', 'access_token',
+    'getStarrdTime', 'intervalTime',
     'starredData'
   ]);
 
   const {
-    access_token,
-    getStarrdTime,
-    intervalTime,
+    user_name, access_token,
+    getStarrdTime, intervalTime,
     starredData
   } = statusStorage;
 
   // 检查status
-  if (!access_token) await Promise.reject(new Error('token不存在。'));
+  if (!user_name) await Promise.reject(new Error('user_name不存在。'));
+  if (!access_token) await Promise.reject(new Error('access_token不存在。'));
 
   if (
     !getStarrdTime
