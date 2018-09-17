@@ -1,3 +1,33 @@
 .wrap {
-  width: 200px;
+  font-family: 'Courier New', Courier, monospace;
+  width: 400px;
+}
+
+#message-box {
+  font-size: 15px;
+  padding-bottom: 8px;
+  text-align: center;
+  border-bottom: 1px solid #eee;
+  margin-bottom: 8px;
+}
+
+.repos-item {
+  display: flex;
+  white-space: nowrap;
+  cursor: pointer;
+  padding: 5px 0;
+}
+
+.repos-item:hover {
+  background-color: #eee;
+}
+
+.repos-name {
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+
+.repos-updatedat {
+  flex: 1;
+  text-align: right;
 }

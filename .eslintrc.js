@@ -10,6 +10,9 @@ module.exports = {
     "ecmaVersion": 2018,
     "sourceType": "module"
   },
+  "globals": {
+    "chrome": true
+  },
   "rules": {
     "indent": [
       "error",

@@ -12,7 +12,7 @@
   "background": {
     "persistent": false,
     "scripts": [
-      "tmp/token.js",
+      "lib/common.js",
       "script/background.js"
     ]
   },

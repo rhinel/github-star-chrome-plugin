@@ -1,47 +1,68 @@
-function setStorage(data) {
-  // eslint-disable-next-line no-undef
-  return new Promise(resolve => chrome.storage.sync.set(data, resolve));
-}
+// 获取 starred方法
+// 暴露调用API
+let gettingStar = false;
 
-function getStorage(data) {
-  // eslint-disable-next-line no-undef
-  return new Promise(resolve => chrome.storage.sync.get(data, resolve));
-}
-
-// 获取 starred
 async function getFetchStarred(_page, _data) {
-  await setStorage({
-    // eslint-disable-next-line no-undef
-    access_token: token
-  });
-
-  const { access_token } = await getStorage('access_token');
+  // token page url
+  const { access_token } = await window.getStorage('access_token');
   const page = _page || 1;
   const baseUrl =
     'https://api.github.com/users/rhinel/starred'
     + `?access_token=${access_token}&page=${page}`;
 
+  // 请求
   const response = await fetch(baseUrl);
 
+  // 更新数据
   const updata = [
     ..._data || [],
     ...await response.clone()['json'](),
   ];
 
+  // 判断页数
   const total = response.headers.get('Link')
     .split(',')[1].match(/(page=)(\d+)(>)/)[2];
 
   console.log('fetching starred: page total', page, total);
 
+  // 请求下一页
   if (Number(total) > page) {
     return getFetchStarred(page + 1, updata);
   }
 
-  return updata;
+  // 设定本次请求时间和数据
+  const backData = {
+    getStarrdTime: Date.now(),
+    starredData: updata
+  };
+
+  await window.setStorage(backData);
+
+  // 返回数据
+  return backData;
 }
 
-// eslint-disable-next-line no-undef
+async function onmsgGetFetchStarred() {
+  if (gettingStar) return Promise.reject(new Error('正在请求中 ...'));
+  gettingStar = true;
+
+  try {
+    const backData = await getFetchStarred();
+    gettingStar = false;
+    return backData;
+  } catch (e) {
+    console.log('onmsgGetFetchStarred error: ', e);
+    gettingStar = false;
+    return Promise.reject(new Error('请求出错。'));
+  }
+}
+
+window.onmsgGetFetchStarred = onmsgGetFetchStarred;
+
+// 安装后回调
+// 启动配置页面请求配置
 chrome.runtime.onInstalled.addListener(async function() {
-  const data = await getFetchStarred();
-  console.log('fetched starred: ', data);
+  chrome.runtime.openOptionsPage(function() {
+    console.log('opening OptionsPage: ', true);
+  });
 });
