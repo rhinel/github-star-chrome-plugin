@@ -28,6 +28,19 @@ summary {
   cursor: pointer;
   outline: none;
   border-bottom: 1px solid #eee;
+  position: relative;
+}
+
+.group-del {
+  position: absolute;
+  top: 50%;
+  right: 0;
+  transform: translateY(-50%);
+  display: none;
+}
+
+summary:hover .group-del:not(.hidden) {
+  display: block;
 }
 
 .repos-item {

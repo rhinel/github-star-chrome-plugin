@@ -4,6 +4,7 @@
 // 获取dom对象
 // wrap
 const wrap = document.querySelector('#wrap');
+const msgBox = document.querySelector('#message-box');
 const fetchBtn = document.querySelector('#click-refetch');
 const groupWrap = document.querySelector('#group-wrap');
 const dataWrap = document.querySelector('#data-wrap');
@@ -19,8 +20,7 @@ const popupStatus = {
 
 // 处理message-box方法
 function dealMsg(...msg) {
-  document.querySelector('#message-box')
-    .innerHTML = msg.join('');
+  msgBox.innerHTML = msg.join('');
 }
 
 // 获取background方法
@@ -54,10 +54,15 @@ async function dealData(data) {
   Object.keys(groupConfig).forEach(groupId => {
     const details = document.createElement('details');
     details.open = groupConfig[groupId].open;
-    const summary = document.createElement('summary');
-    summary.dataset.id = groupId;
-    summary.innerHTML = groupConfig[groupId].name;
-    details.appendChild(summary);
+    details.innerHTML = `
+      <summary data-id="${groupId}">
+        <span>${groupConfig[groupId].name}</span>
+        <button
+          class="group-del${groupId === 'ungroup' ? ' hidden' : ''}"
+          data-id="${groupId}"
+        >删除分组</button>
+      </summary>
+    `;
     groupConfig[groupId] = details;
     dataHtmlFragment.appendChild(details);
   });
@@ -95,9 +100,7 @@ async function dealData(data) {
 
     if (groupId && groupConfig[groupId]) {
       groupSet[repos.id].valid = true;
-    }
-
-    if (!groupId) {
+    } else {
       groupId = 'ungroup';
     }
 
@@ -214,6 +217,7 @@ async function getGroupTypeChange(groupId) {
     ]);
 
     // 处理更新
+    // dom已更新
     groupConfig[groupId].open = !groupConfig[groupId].open;
 
     await window.setStorage({
@@ -253,6 +257,7 @@ async function getReposGroupChange(groupId) {
       groupSet
     });
 
+    // 更新dom数据
     await dealData(starredData);
 
     // 清除状态
@@ -292,7 +297,7 @@ async function getAddGroupConfirm() {
     }
 
     // 处理更新
-    let { groupConfig } = await window.getStorage([
+    const { groupConfig } = await window.getStorage([
       'groupConfig'
     ]);
 
@@ -308,6 +313,7 @@ async function getAddGroupConfirm() {
       groupConfig
     });
 
+    // 更新dom数据
     await dealGroup();
 
     // 清除状态
@@ -316,6 +322,36 @@ async function getAddGroupConfirm() {
     console.log('getAddGroupConfirm error: ', e);
     // TODO handler error ?
   }
+}
+
+// 处理getDelGroup 方法
+// 处理所有异常
+async function getDelGroup(groupId) {
+  try {
+    if (groupId === 'ungroup') return;
+
+    const userConfirm = confirm('确认删除该组？内容将设置为未分组。');
+    if (!userConfirm) return;
+
+    // 获取
+    const { groupConfig, starredData } = await window.getStorage([
+      'groupConfig', 'starredData'
+    ]);
+
+    delete groupConfig[groupId];
+
+    await window.setStorage({
+      groupConfig
+    });
+
+    // 更新dom数据
+    await dealGroup();
+    await dealData(starredData);
+  } catch (e) {
+    console.log('getAddGroupConfirm error: ', e);
+    // TODO handler error ?
+  }
+
 
 }
 
@@ -326,9 +362,6 @@ async function getAddGroupConfirm() {
       return dealFetchData(msg);
     }
   });
-
-  // 获取数据
-  getRefetch();
 
   // 状态恢复
   wrap.onclick = wrapReset;
@@ -354,6 +387,10 @@ async function getAddGroupConfirm() {
     if (evt.target.nodeName === 'SUMMARY') {
       return getGroupTypeChange(evt.target.dataset.id);
     }
+
+    if (evt.target.className === 'group-del') {
+      return getDelGroup(evt.target.dataset.id);
+    }
   };
 
   // dialog-group事件
@@ -377,4 +414,7 @@ async function getAddGroupConfirm() {
       return getAddGroupChange();
     }
   };
+
+  // 获取数据
+  getRefetch();
 })();
