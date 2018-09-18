@@ -1,12 +1,14 @@
-.wrap {
+#wrap {
   font-family: "Helvetica Neue",Helvetica,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","微软雅黑",Arial,sans-serif;
   -webkit-user-select: none;
   position: relative;
   width: 400px;
 }
 
-.message-wrap {
+#message-wrap {
   text-align: center;
+  padding-bottom: 8px;
+  border-bottom: 1px solid #eee;
 }
 
 #message-box {
@@ -18,8 +20,6 @@
 }
 
 details {
-  margin-top: 8px;
-  margin-bottom: -8px;
 }
 
 summary {
@@ -27,7 +27,6 @@ summary {
   font-size: 14px;
   cursor: pointer;
   outline: none;
-  border-top: 1px solid #eee;
   border-bottom: 1px solid #eee;
 }
 
@@ -38,6 +37,10 @@ summary {
   white-space: nowrap;
   cursor: pointer;
   padding: 5px 0;
+}
+
+.repos-item:last-child {
+  border-bottom: 1px solid #eee;
 }
 
 .repos-item .repos-do {
@@ -67,6 +70,7 @@ summary {
 }
 
 #dialog-wrap {
+  min-width: 200px;
   position: absolute;
   top: 0;
   right: 0;
@@ -80,13 +84,26 @@ summary {
 #dialog-wrap > div:first-child {
   padding-bottom: 5px;
   border-bottom: 1px solid #eee;
+  font-size: 14px;
 }
 
+#add-group,
 #group-wrap > div {
   padding: 5px 0;
   cursor: pointer;
+  font-size: 13px;
 }
 
+#add-group:hover,
 #group-wrap > div:hover {
   background-color: #eee;
+}
+
+#add-group-warp {
+  display: none;
+}
+
+#add-group-input {
+  vertical-align: top;
+  height: 15px;
 }

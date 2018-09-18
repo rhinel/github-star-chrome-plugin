@@ -8,8 +8,8 @@
   <title>popup</title>
 </head>
 <body>
-  <div class="wrap">
-    <div class="message-wrap">
+  <div id="wrap">
+    <div id="message-wrap">
       <span id="message-box">GitHub Star List</span>
       <button id="click-refetch">手动刷新</button>
     </div>
@@ -19,6 +19,12 @@
     <div id="dialog-wrap">
       <div>请选择分组：</div>
       <div id="group-wrap"></div>
+      <div id="add-group">增加分组</div>
+      <div id="add-group-warp">
+        <input id="add-group-input" name="add-group-input">
+        <button id="add-group-confirm">确定</button>
+        <button id="add-group-cancel">取消</button>
+      </div>
     </div>
   </div>
   <script src="../lib/common.js"></script>

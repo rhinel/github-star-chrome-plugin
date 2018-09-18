@@ -3,19 +3,14 @@
 
 // 获取dom对象
 // wrap
-const wrap = document.querySelector('.wrap');
-
-// fetchBtn
+const wrap = document.querySelector('#wrap');
 const fetchBtn = document.querySelector('#click-refetch');
-
-// groupWrap
 const groupWrap = document.querySelector('#group-wrap');
-
-// dataWrap
 const dataWrap = document.querySelector('#data-wrap');
-
-// dialogWrap
 const dialogWrap = document.querySelector('#dialog-wrap');
+const addGroup = document.querySelector('#add-group');
+const addGroupWarp = document.querySelector('#add-group-warp');
+const addGroupInput = document.querySelector('#add-group-input');
 
 // 状态机变量
 const popupStatus = {
@@ -36,7 +31,6 @@ function getBgPage() {
 // 显示列表方法
 async function dealData(data) {
   // 获取group数据
-  const groupHtmlFragment = document.createDocumentFragment();
   const dataHtmlFragment = document.createDocumentFragment();
   let { groupConfig, groupSet } = await window.getStorage([
     'groupConfig', 'groupSet'
@@ -58,12 +52,6 @@ async function dealData(data) {
   }
 
   Object.keys(groupConfig).forEach(groupId => {
-    const div = document.createElement('div');
-    div.className = 'dialog-group-do';
-    div.dataset.id = groupId;
-    div.innerHTML = groupConfig[groupId].name;
-    groupHtmlFragment.appendChild(div);
-
     const details = document.createElement('details');
     details.open = groupConfig[groupId].open;
     const summary = document.createElement('summary');
@@ -103,8 +91,13 @@ async function dealData(data) {
 
     if (groupSet[repos.id]) {
       groupId = groupSet[repos.id].groupId;
+    }
+
+    if (groupId && groupConfig[groupId]) {
       groupSet[repos.id].valid = true;
-    } else {
+    }
+
+    if (!groupId) {
       groupId = 'ungroup';
     }
 
@@ -123,10 +116,29 @@ async function dealData(data) {
   });
 
   // 载入页面
-  groupWrap.innerHTML = '';
-  groupWrap.appendChild(groupHtmlFragment);
   dataWrap.innerHTML = '';
   dataWrap.appendChild(dataHtmlFragment);
+}
+
+// 显示分组方法
+async function dealGroup() {
+  // 获取group数据
+  const groupHtmlFragment = document.createDocumentFragment();
+  let { groupConfig } = await window.getStorage([
+    'groupConfig'
+  ]);
+
+  Object.keys(groupConfig).forEach(groupId => {
+    const div = document.createElement('div');
+    div.className = 'dialog-group-do';
+    div.dataset.id = groupId;
+    div.innerHTML = groupConfig[groupId].name;
+    groupHtmlFragment.appendChild(div);
+  });
+
+  // 载入页面
+  groupWrap.innerHTML = '';
+  groupWrap.appendChild(groupHtmlFragment);
 }
 
 // 监听方法
@@ -140,7 +152,8 @@ async function dealFetchData(starrd) {
       '列表刷新时间：',
       new Date(starrd.getStarrdTime).toLocaleString()
     );
-    dealData(starrd.starredData);
+    await dealGroup();
+    await dealData(starrd.starredData);
   } catch (e) {
     console.log('dealFetchData error: ', e);
     dealMsg(e.message || e);
@@ -150,9 +163,17 @@ async function dealFetchData(starrd) {
 // 交互方法
 
 // wrapReset 方法
+// 处理所有异常
 async function wrapReset() {
-  popupStatus.reposDoId = '';
-  dialogWrap.style.display = 'none';
+  try {
+    // 处理状态
+    popupStatus.reposDoId = '';
+    dialogWrap.style.display = 'none';
+    getAddGroupChange(true);
+  } catch(e) {
+    console.log('wrapReset error: ', e);
+    // TODO handler error ?
+  }
 }
 
 // fetch 方法
@@ -214,8 +235,8 @@ async function getReposGroupChange(groupId) {
     if (!reposDoId) {
       await Promise.reject(new Error('没有reposDoId。'));
     }
-    const { groupSet } = await window.getStorage([
-      'groupSet'
+    const { groupSet, starredData } = await window.getStorage([
+      'groupSet', 'starredData'
     ]);
 
     // 处理更新
@@ -232,12 +253,70 @@ async function getReposGroupChange(groupId) {
       groupSet
     });
 
+    await dealData(starredData);
+
     // 清除状态
-    wrapReset();
+    return wrapReset();
   } catch (e) {
     console.log('getReposGroupChange error: ', e);
     // TODO handler error ?
   }
+}
+
+// 处理add-group 切换方法
+// 处理所有异常
+async function getAddGroupChange(close) {
+  try {
+    // 处理变化
+    if (close || addGroup.style.display === 'none') {
+      addGroupInput.value = '';
+      addGroup.style.display = 'block';
+      addGroupWarp.style.display = 'none';
+    } else {
+      addGroup.style.display = 'none';
+      addGroupWarp.style.display = 'block';
+    }
+  } catch (e) {
+    console.log('getAddGroupChange error: ', e);
+    // TODO handler error ?
+  }
+}
+
+// 处理add-group-confirm 方法
+// 处理所有异常
+async function getAddGroupConfirm() {
+  try {
+    // 检查
+    if (!addGroupInput.value) {
+      await Promise.reject(new Error('请输入分组名称'));
+    }
+
+    // 处理更新
+    let { groupConfig } = await window.getStorage([
+      'groupConfig'
+    ]);
+
+    const newGroupId = Date.now();
+
+    groupConfig[newGroupId] = {
+      id: newGroupId,
+      name: addGroupInput.value,
+      open: true
+    };
+
+    await window.setStorage({
+      groupConfig
+    });
+
+    await dealGroup();
+
+    // 清除状态
+    return getAddGroupChange(true);
+  } catch (e) {
+    console.log('getAddGroupConfirm error: ', e);
+    // TODO handler error ?
+  }
+
 }
 
 (async function () {
@@ -263,13 +342,16 @@ async function getReposGroupChange(groupId) {
     if (evt.target.className === 'repos-do') {
       evt.stopPropagation();
       // getReposDo
+      // 添加状态变化
       popupStatus.reposDoId = evt.target.dataset.id;
       dialogWrap.style.display = 'block';
-      dialogWrap.style.top = evt.y + 'px';
+      dialogWrap.style.top = (window.scrollY + evt.y) + 'px';
       dialogWrap.style.right = (400 - evt.x) + 'px';
       // TODO handler error ?
       return;
-    } else if (evt.target.nodeName === 'SUMMARY') {
+    }
+
+    if (evt.target.nodeName === 'SUMMARY') {
       return getGroupTypeChange(evt.target.dataset.id);
     }
   };
@@ -277,8 +359,22 @@ async function getReposGroupChange(groupId) {
   // dialog-group事件
   dialogWrap.onclick = function(evt) {
     evt.stopPropagation();
+    console.log(evt.target);
+    // 以下事件可能需要主动调用wrapReset
     if (evt.target.className === 'dialog-group-do') {
       return getReposGroupChange(evt.target.dataset.id);
+    }
+
+    if (evt.target.id === 'add-group') {
+      return getAddGroupChange();
+    }
+
+    if (evt.target.id === 'add-group-confirm') {
+      return getAddGroupConfirm();
+    }
+
+    if (evt.target.id === 'add-group-cancel') {
+      return getAddGroupChange();
     }
   };
 })();
