@@ -1,6 +1,42 @@
-// 获取 starred方法
 // 暴露调用API
-async function getFetchStarred(_page, _data) {
+
+// 检查状态方法
+async function getCheckStatus() {
+  // 获取存储status
+  const {
+    user_name, access_token,
+    getStarrdTime, intervalTime,
+    starredData
+  } = await window.getStorage([
+    'user_name', 'access_token',
+    'getStarrdTime', 'intervalTime',
+    'starredData'
+  ]);
+
+  // 检查status
+  if (!user_name) await Promise.reject(new Error('user_name不存在。'));
+  if (!access_token) await Promise.reject(new Error('access_token不存在。'));
+
+  let backData;
+
+  if (
+    !getStarrdTime
+    || getStarrdTime + (intervalTime || 60) * 60 * 1000 < Date.now()
+  ) {
+    backData = {};
+  } else {
+    backData = {
+      getStarrdTime,
+      starredData
+    };
+  }
+
+  // 返回数据
+  return backData;
+}
+
+// 获取 starred方法
+async function getFetchStarredOne(_page, _data) {
   // token page url
   const { user_name, access_token } = await window.getStorage([
     'user_name', 'access_token'
@@ -27,7 +63,7 @@ async function getFetchStarred(_page, _data) {
 
   // 请求下一页
   if (Number(total) > page) {
-    return getFetchStarred(page + 1, updata);
+    return getFetchStarredOne(page + 1, updata);
   }
 
   // 设定本次请求时间和数据
@@ -39,29 +75,30 @@ async function getFetchStarred(_page, _data) {
   await window.setStorage(backData);
 
   // 返回数据
+  // 返回数据
   return backData;
 }
 
-async function onmsgGetFetchStarred() {
+async function getFetchStarred() {
   // 判断标识为0，为请求中，阻止，其他地方判断不存在
   const { getStarrdTime } = await window.getStorage([
     'getStarrdTime'
   ]);
-  if (getStarrdTime === 0) return Promise.reject(new Error('正在请求中 ...'));
+  if (getStarrdTime === 0) {
+    await Promise.reject(new Error('正在请求中 ...'));
+  }
   await window.setStorage({
     getStarrdTime: 0
   });
 
-  try {
-    const backData = await getFetchStarred();
-    return backData;
-  } catch (e) {
-    console.log('onmsgGetFetchStarred error: ', e);
-    return Promise.reject(new Error('请求出错。'));
-  }
+  return window.sendMessage({
+    callFun: 'dealFetchData',
+    ...await getFetchStarredOne()
+  });
 }
 
-window.onmsgGetFetchStarred = onmsgGetFetchStarred;
+window.onmsgGetCheckStatus = getCheckStatus;
+window.onmsgGetFetchStarred = getFetchStarred;
 
 // 安装后回调
 // 启动配置页面请求配置

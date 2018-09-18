@@ -13,7 +13,9 @@
   // save button
   const save_options_button = document.querySelector('#save_options');
   const save_message = document.querySelector('#save_message');
-  save_options_button.onclick = async function() {
+
+  // save function
+  async function save_func() {
     try {
       if (!access_token_input.value) {
         await Promise.reject(new Error('请输入token。'));
@@ -26,7 +28,11 @@
 
       save_message.innerHTML = '保存成功！';
     } catch (e) {
+      console.log('save_func error: ', e);
       save_message.innerHTML = e.message || e;
     }
-  };
+  }
+
+  // save
+  save_options_button.onclick = save_func;
 })();

@@ -1,6 +1,7 @@
 .wrap {
   font-family: "Helvetica Neue",Helvetica,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","微软雅黑",Arial,sans-serif;
   -webkit-user-select: none;
+  position: relative;
   width: 400px;
 }
 
@@ -31,6 +32,7 @@ summary {
 }
 
 .repos-item {
+  position: relative;
   font-size: 13px;
   display: flex;
   white-space: nowrap;
@@ -38,8 +40,20 @@ summary {
   padding: 5px 0;
 }
 
+.repos-item .repos-do {
+  position: absolute;
+  top: calc(50% - 1px);
+  right: 0;
+  transform: translateY(-50%);
+  display: none;
+}
+
 .repos-item:hover {
   background-color: #eee;
+}
+
+.repos-item:hover .repos-do {
+  display: block;
 }
 
 .repos-name {
@@ -50,4 +64,29 @@ summary {
 .repos-updatedat {
   flex: 1;
   text-align: right;
+}
+
+#dialog-wrap {
+  position: absolute;
+  top: 0;
+  right: 0;
+  display: none;
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  padding: 5px;
+}
+
+#dialog-wrap > div:first-child {
+  padding-bottom: 5px;
+  border-bottom: 1px solid #eee;
+}
+
+#group-wrap > div {
+  padding: 5px 0;
+  cursor: pointer;
+}
+
+#group-wrap > div:hover {
+  background-color: #eee;
 }
