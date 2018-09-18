@@ -7,8 +7,6 @@
 
 #message-wrap {
   text-align: center;
-  padding-bottom: 8px;
-  border-bottom: 1px solid #eee;
 }
 
 #message-box {
@@ -19,7 +17,9 @@
   vertical-align: bottom;
 }
 
-details {
+details:first-child {
+  margin-top: 8px;
+  border-top: 1px solid #eee;
 }
 
 summary {
