@@ -1,0 +1,24 @@
+.wrap {
+  font-family: "Helvetica Neue",Helvetica,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","微软雅黑",Arial,sans-serif;
+  -webkit-user-select: none;
+  width: 500px;
+}
+
+.title-wrap {
+  font-size: 15px;
+  margin-bottom: 15px;
+}
+
+.form-item {
+  margin-bottom: 15px;
+}
+
+.form-item label {
+  display: flex;
+  align-items: center;
+}
+
+.form-item input {
+  flex: 1;
+  margin-left: 5px;
+}

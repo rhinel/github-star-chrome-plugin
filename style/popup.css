@@ -1,0 +1,122 @@
+#wrap {
+  font-family: "Helvetica Neue",Helvetica,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","微软雅黑",Arial,sans-serif;
+  -webkit-user-select: none;
+  position: relative;
+  width: 400px;
+}
+
+#message-wrap {
+  text-align: center;
+}
+
+#message-box {
+  font-size: 15px;
+}
+
+#click-refetch {
+  vertical-align: bottom;
+}
+
+details:first-child {
+  margin-top: 8px;
+  border-top: 1px solid #eee;
+}
+
+summary {
+  padding: 5px 0;
+  font-size: 14px;
+  cursor: pointer;
+  outline: none;
+  border-bottom: 1px solid #eee;
+  position: relative;
+}
+
+.group-del {
+  position: absolute;
+  top: 50%;
+  right: 0;
+  transform: translateY(-50%);
+  display: none;
+}
+
+summary:hover .group-del:not(.hidden) {
+  display: block;
+}
+
+.repos-item {
+  position: relative;
+  font-size: 13px;
+  display: flex;
+  white-space: nowrap;
+  cursor: pointer;
+  padding: 5px 0;
+}
+
+.repos-item:last-child {
+  border-bottom: 1px solid #eee;
+}
+
+.repos-item .repos-do {
+  position: absolute;
+  top: calc(50% - 1px);
+  right: 0;
+  transform: translateY(-50%);
+  display: none;
+}
+
+.repos-item:hover {
+  background-color: #eee;
+}
+
+.repos-item:hover .repos-do {
+  display: block;
+}
+
+.repos-name {
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+
+.repos-updatedat {
+  flex: 1;
+  text-align: right;
+}
+
+#dialog-wrap {
+  min-width: 200px;
+  position: absolute;
+  top: 0;
+  right: 0;
+  display: none;
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  padding: 5px;
+}
+
+#dialog-wrap > div:first-child {
+  padding-bottom: 5px;
+  border-bottom: 1px solid #eee;
+  font-size: 14px;
+}
+
+#add-group,
+#group-wrap > div {
+  padding: 5px 0;
+  cursor: pointer;
+  font-size: 13px;
+}
+
+#add-group:hover,
+#group-wrap > div:hover {
+  background-color: #eee;
+}
+
+#add-group-warp {
+  display: none;
+}
+
+#add-group-input {
+  vertical-align: top;
+  height: 15px;
+}

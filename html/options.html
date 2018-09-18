@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <link rel="stylesheet" href="../style/options.css">
+  <title>options</title>
+</head>
+<body>
+  <div class="wrap">
+    <div class="title-wrap">
+      管理GitHub Star的Chrome拓展
+    </div>
+
+    <div class="form-wrap">
+      <div class="form-item">
+        <label>
+          user_name:
+          <input id="user_name" name="user_name">
+        </label>
+      </div>
+
+      <div class="form-item">
+        <label>
+          access_token:
+          <input id="access_token" name="access_token">
+        </label>
+      </div>
+
+      <div class="form-item">
+        <button id="save_options">保存</button>
+        <span id="save_message"></span>
+      </div>
+    </div>
+  </div>
+  <script src="../lib/common.js"></script>
+  <script src="../script/options.js"></script>
+</body>
+</html>

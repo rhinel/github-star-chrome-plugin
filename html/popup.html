@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <link rel="stylesheet" href="../style/popup.css">
+  <title>popup</title>
+</head>
+<body>
+  <div id="wrap">
+    <div id="message-wrap">
+      <span id="message-box">GitHub Star List</span>
+      <button id="click-refetch">手动刷新</button>
+    </div>
+
+    <div id="data-wrap"></div>
+
+    <div id="dialog-wrap">
+      <div>请选择分组：</div>
+      <div id="group-wrap"></div>
+      <div id="add-group">增加分组</div>
+      <div id="add-group-warp">
+        <input id="add-group-input" name="add-group-input">
+        <button id="add-group-confirm">确定</button>
+        <button id="add-group-cancel">取消</button>
+      </div>
+    </div>
+  </div>
+  <script src="../lib/common.js"></script>
+  <script src="../script/popup.js"></script>
+</body>
+</html>
