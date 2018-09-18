@@ -48,33 +48,49 @@ function dealMsg(...msg) {
 // 显示列表方法
 function dealData(data) {
   const htmlFragment = document.createDocumentFragment();
+  const details = document.createElement('details');
+  const summary = document.createElement('summary');
+  summary.innerHTML = '未分组';
+  details.appendChild(summary);
+  htmlFragment.appendChild(details);
   data.forEach(repos => {
     const div = document.createElement('div');
     div.className = 'repos-item';
+    div.draggable = true;
     div.innerHTML = `
       <span class="repos-name">${repos.full_name}</span>
       <span class="repos-updatedat">${repos.pushed_at}</span>
     `;
-    htmlFragment.appendChild(div);
+    details.appendChild(div);
   });
 
   document.querySelector('#data-wrap').innerHTML = '';
   document.querySelector('#data-wrap').appendChild(htmlFragment);
 }
 
-(async function () {
+// fetchBtn
+const fetchBtn = document.querySelector('#click-refetch');
+
+// fetch 方法
+// 处理所有异常
+async function getRefetch(check) {
   try {
-    let starrd;
+    let starrd = {};
     // 检查状态
-    starrd = await checkStatus();
+    // 获取数据
+    if (check) {
+      starrd = await checkStatus();
+    }
 
     if (!starrd.getStarrdTime) {
       dealMsg('列表刷新中 ...');
+      fetchBtn.disabled = true;
       starrd = await getBgPage()
         .then(_ => _.onmsgGetFetchStarred());
+      fetchBtn.disabled = false;
     }
 
-    // 获取数据
+    // 处理数据
     dealMsg(
       '列表刷新时间：',
       new Date(starrd.getStarrdTime).toLocaleString()
@@ -86,4 +102,12 @@ function dealData(data) {
     console.log('init error: ', e);
     dealMsg(e.message || e);
   }
+}
+
+(async function () {
+  getRefetch(true);
+
+  fetchBtn.onclick = function() {
+    return getRefetch(false);
+  };
 })();

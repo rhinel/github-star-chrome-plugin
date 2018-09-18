@@ -1,7 +1,5 @@
 // 获取 starred方法
 // 暴露调用API
-let gettingStar = false;
-
 async function getFetchStarred(_page, _data) {
   // token page url
   const { user_name, access_token } = await window.getStorage([
@@ -45,16 +43,20 @@ async function getFetchStarred(_page, _data) {
 }
 
 async function onmsgGetFetchStarred() {
-  if (gettingStar) return Promise.reject(new Error('正在请求中 ...'));
-  gettingStar = true;
+  // 判断标识为0，为请求中，阻止，其他地方判断不存在
+  const { getStarrdTime } = await window.getStorage([
+    'getStarrdTime'
+  ]);
+  if (getStarrdTime === 0) return Promise.reject(new Error('正在请求中 ...'));
+  await window.setStorage({
+    getStarrdTime: 0
+  });
 
   try {
     const backData = await getFetchStarred();
-    gettingStar = false;
     return backData;
   } catch (e) {
     console.log('onmsgGetFetchStarred error: ', e);
-    gettingStar = false;
     return Promise.reject(new Error('请求出错。'));
   }
 }

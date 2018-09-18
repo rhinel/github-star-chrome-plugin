@@ -1,17 +1,37 @@
 .wrap {
-  font-family: 'Courier New', Courier, monospace;
+  font-family: "Helvetica Neue",Helvetica,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","微软雅黑",Arial,sans-serif;
+  -webkit-user-select: none;
   width: 400px;
+}
+
+.message-wrap {
+  text-align: center;
 }
 
 #message-box {
   font-size: 15px;
-  padding-bottom: 8px;
-  text-align: center;
+}
+
+#click-refetch {
+  vertical-align: bottom;
+}
+
+details {
+  margin-top: 8px;
+  margin-bottom: -8px;
+}
+
+summary {
+  padding: 5px 0;
+  font-size: 14px;
+  cursor: pointer;
+  outline: none;
+  border-top: 1px solid #eee;
   border-bottom: 1px solid #eee;
-  margin-bottom: 8px;
 }
 
 .repos-item {
+  font-size: 13px;
   display: flex;
   white-space: nowrap;
   cursor: pointer;
