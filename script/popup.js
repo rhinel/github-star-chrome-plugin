@@ -58,7 +58,7 @@ async function dealData(data) {
       <summary data-id="${groupId}">
         <span>${groupConfig[groupId].name}</span>
         <button
-          class="group-del${groupId === 'ungroup' ? ' hidden' : ''}"
+          class="button button-small group-del${groupId === 'ungroup' ? ' hidden' : ''}"
           data-id="${groupId}"
         >删除分组</button>
       </summary>
@@ -85,11 +85,17 @@ async function dealData(data) {
     const div = document.createElement('div');
     div.className = 'repos-item';
     div.innerHTML = `
-      <a class="repos-name" href="${repos.html_url}" target="_blank">
-        ${repos.full_name}
+      <a
+        class="repos-name"
+        href="${repos.html_url}"
+        target="_blank"
+      >${repos.full_name}
       </a>
       <span class="repos-updatedat">${repos.pushed_at}</span>
-      <button class="repos-do" data-id="${repos.id}">调整分组</button>
+      <button
+        class="button button-white button-small repos-do"
+        data-id="${repos.id}"
+      >调整分组</button>
     `;
 
     let groupId;
@@ -151,6 +157,7 @@ async function dealGroup() {
 async function dealFetchData(starrd) {
   try {
     fetchBtn.disabled = false;
+    fetchBtn.classList.remove('button-disabled');
     dealMsg(
       '列表刷新时间：',
       new Date(starrd.getStarrdTime).toLocaleString()
@@ -185,6 +192,7 @@ async function getRefetch(uncheck) {
   try {
     dealMsg('列表刷新中 ...');
     fetchBtn.disabled = true;
+    fetchBtn.classList.add('button-disabled');
     let starrd = {};
 
     // 检查状态
@@ -324,9 +332,9 @@ async function getAddGroupConfirm() {
   }
 }
 
-// 处理getDelGroup 方法
+// 处理group-del 方法
 // 处理所有异常
-async function getDelGroup(groupId) {
+async function getGroupDel(groupId) {
   try {
     if (groupId === 'ungroup') return;
 
@@ -348,11 +356,9 @@ async function getDelGroup(groupId) {
     await dealGroup();
     await dealData(starredData);
   } catch (e) {
-    console.log('getAddGroupConfirm error: ', e);
+    console.log('getGroupDel error: ', e);
     // TODO handler error ?
   }
-
-
 }
 
 (async function () {
@@ -372,7 +378,7 @@ async function getDelGroup(groupId) {
   // repos事件
   dataWrap.onclick = function(evt) {
     // 代理repos-do事件
-    if (evt.target.className === 'repos-do') {
+    if (evt.target.classList.contains('repos-do')) {
       evt.stopPropagation();
       // getReposDo
       // 添加状态变化
@@ -388,15 +394,14 @@ async function getDelGroup(groupId) {
       return getGroupTypeChange(evt.target.dataset.id);
     }
 
-    if (evt.target.className === 'group-del') {
-      return getDelGroup(evt.target.dataset.id);
+    if (evt.target.classList.contains('group-del')) {
+      return getGroupDel(evt.target.dataset.id);
     }
   };
 
   // dialog-group事件
   dialogWrap.onclick = function(evt) {
     evt.stopPropagation();
-    console.log(evt.target);
     // 以下事件可能需要主动调用wrapReset
     if (evt.target.className === 'dialog-group-do') {
       return getReposGroupChange(evt.target.dataset.id);

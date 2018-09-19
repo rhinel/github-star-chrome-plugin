@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <link rel="stylesheet" href="../lib/sierra/sierra.min.css">
   <link rel="stylesheet" href="../style/popup.css">
   <title>popup</title>
 </head>
@@ -11,20 +12,22 @@
   <div id="wrap">
     <div id="message-wrap">
       <span id="message-box">GitHub Star List</span>
-      <button id="click-refetch">手动刷新</button>
+      <button id="click-refetch" class="button button-outlined button-small">手动刷新</button>
     </div>
 
     <div id="data-wrap"></div>
 
     <div id="dialog-wrap">
       <div>请选择分组：</div>
-      <div id="group-wrap"></div>
       <div id="add-group">增加分组</div>
-      <div id="add-group-warp">
-        <input id="add-group-input" name="add-group-input">
-        <button id="add-group-confirm">确定</button>
-        <button id="add-group-cancel">取消</button>
+      <div id="add-group-warp" class="form-collapse">
+        <div class="input item item-main">
+          <input id="add-group-input" name="add-group-input">
+        </div>
+        <button id="add-group-confirm" class="item button button-primary">确定</button>
+        <button id="add-group-cancel" class="item button button-outlined">取消</button>
       </div>
+      <div id="group-wrap"></div>
     </div>
   </div>
   <script src="../lib/common.js"></script>
