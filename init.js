@@ -3,7 +3,9 @@ const chalk = require('chalk');
 const fs = require('fs-extra');
 const path = require('path');
 
-const options = {};
+const options = {
+  sierra: './node_modules/sierra-library/dist/sierra.min.css'
+};
 
 const baseDir = path.resolve(__dirname, './lib');
 

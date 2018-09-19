@@ -14,12 +14,15 @@
 ## screenshot
 
 <p align="center">
-  <img src="https://user-images.githubusercontent.com/12730596/45696911-25986400-bb97-11e8-86ad-9dc69c4e2f7b.png" width="300px">
+  <img src="https://user-images.githubusercontent.com/12730596/45739338-53c48500-bc25-11e8-9467-f718ccfbd38f.png" width="300px">
 </p>
 
 ## future
 
-1. 太丑了，加入个样式库。
-2. 增加排序功能。
-3. 增加搜索功能。
-4. 增加备注功能。
+[x] 太丑了，加入个样式库。
+
+[ ] 增加排序功能。
+
+[ ] 增加搜索功能。
+
+[ ] 增加备注功能。
