@@ -15,6 +15,7 @@ const addGroupInput = document.querySelector('#add-group-input');
 
 // 状态机变量
 const popupStatus = {
+  // 当前处理的库对象
   reposDoId: ''
 };
 
@@ -32,7 +33,9 @@ function getBgPage() {
 async function dealData(data) {
   // 获取group数据
   const dataHtmlFragment = document.createDocumentFragment();
-  let { groupConfig, groupSet } = await window.getStorage([
+  let {
+    groupConfig, groupSet
+  } = await window.getStorage([
     'groupConfig', 'groupSet'
   ]);
 
@@ -133,7 +136,9 @@ async function dealData(data) {
 async function dealGroup() {
   // 获取group数据
   const groupHtmlFragment = document.createDocumentFragment();
-  let { groupConfig } = await window.getStorage([
+  let {
+    groupConfig
+  } = await window.getStorage([
     'groupConfig'
   ]);
 
@@ -220,7 +225,9 @@ async function getRefetch(uncheck) {
 async function getGroupTypeChange(groupId) {
   try {
     // 获取
-    const { groupConfig } = await window.getStorage([
+    const {
+      groupConfig
+    } = await window.getStorage([
       'groupConfig'
     ]);
 
@@ -247,7 +254,9 @@ async function getReposGroupChange(groupId) {
     if (!reposDoId) {
       await Promise.reject(new Error('没有reposDoId。'));
     }
-    const { groupSet, starredData } = await window.getStorage([
+    const {
+      groupSet, starredData
+    } = await window.getStorage([
       'groupSet', 'starredData'
     ]);
 
@@ -305,7 +314,9 @@ async function getAddGroupConfirm() {
     }
 
     // 处理更新
-    const { groupConfig } = await window.getStorage([
+    const {
+      groupConfig
+    } = await window.getStorage([
       'groupConfig'
     ]);
 
@@ -342,7 +353,9 @@ async function getGroupDel(groupId) {
     if (!userConfirm) return;
 
     // 获取
-    const { groupConfig, starredData } = await window.getStorage([
+    const {
+      groupConfig, starredData
+    } = await window.getStorage([
       'groupConfig', 'starredData'
     ]);
 
@@ -365,7 +378,7 @@ async function getGroupDel(groupId) {
   // 监听数据
   chrome.runtime.onMessage.addListener(msg => {
     if (msg.callFun === 'dealFetchData') {
-      return dealFetchData(msg);
+      return dealFetchData(msg) || true;
     }
   });
 

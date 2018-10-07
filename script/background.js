@@ -35,10 +35,12 @@ async function getCheckStatus() {
   return backData;
 }
 
-// 获取 starred方法
+// 获取 starred方法中递归部分
 async function getFetchStarredOne(_page, _data) {
   // token page url
-  const { user_name, access_token } = await window.getStorage([
+  const {
+    user_name, access_token
+  } = await window.getStorage([
     'user_name', 'access_token'
   ]);
   const page = _page || 1;
@@ -75,13 +77,15 @@ async function getFetchStarredOne(_page, _data) {
   await window.setStorage(backData);
 
   // 返回数据
-  // 返回数据
   return backData;
 }
 
+// 获取 starred方法
 async function getFetchStarred() {
   // 判断标识为0，为请求中，阻止，其他地方判断不存在
-  const { getStarrdTime } = await window.getStorage([
+  const {
+    getStarrdTime
+  } = await window.getStorage([
     'getStarrdTime'
   ]);
   if (getStarrdTime === 0) {
