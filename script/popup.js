@@ -395,10 +395,12 @@ async function getGroupDel(groupId) {
       evt.stopPropagation();
       // getReposDo
       // 添加状态变化
+      const winScrollY = window.scrollY;
       popupStatus.reposDoId = evt.target.dataset.id;
       dialogWrap.style.display = 'block';
-      dialogWrap.style.top = (window.scrollY + evt.y) + 'px';
-      dialogWrap.style.right = (400 - evt.x) + 'px';
+      dialogWrap.style.top = evt.pageY + 'px';
+      dialogWrap.style.right = (408 - evt.pageX) + 'px';
+      window.scrollTo(0, winScrollY);
       // TODO handler error ?
       return;
     }
