@@ -61,7 +61,7 @@ async function dealData(data) {
       <summary data-id="${groupId}">
         <span>${groupConfig[groupId].name}</span>
         <button
-          class="button button-small group-del${groupId === 'ungroup' ? ' hidden' : ''}"
+          class="button button--small group-del${groupId === 'ungroup' ? ' hidden' : ''}"
           data-id="${groupId}"
         >删除分组</button>
       </summary>
@@ -96,7 +96,7 @@ async function dealData(data) {
       </a>
       <span class="repos-updatedat">${repos.pushed_at}</span>
       <button
-        class="button button-white button-small repos-do"
+        class="button button--white button--small repos-do"
         data-id="${repos.id}"
       >调整分组</button>
     `;
@@ -162,7 +162,7 @@ async function dealGroup() {
 async function dealFetchData(starrd) {
   try {
     fetchBtn.disabled = false;
-    fetchBtn.classList.remove('button-disabled');
+    fetchBtn.classList.remove('button--disabled');
     dealMsg(
       '列表刷新时间：',
       new Date(starrd.getStarrdTime).toLocaleString()
@@ -197,7 +197,7 @@ async function getRefetch(uncheck) {
   try {
     dealMsg('列表刷新中 ...');
     fetchBtn.disabled = true;
-    fetchBtn.classList.add('button-disabled');
+    fetchBtn.classList.add('button--disabled');
     let starrd = {};
 
     // 检查状态
@@ -292,11 +292,11 @@ async function getAddGroupChange(close) {
     // 处理变化
     if (close || addGroup.style.display === 'none') {
       addGroupInput.value = '';
-      addGroup.style.display = 'block';
+      addGroup.style.display = 'flex';
       addGroupWarp.style.display = 'none';
     } else {
       addGroup.style.display = 'none';
-      addGroupWarp.style.display = 'block';
+      addGroupWarp.style.display = 'flex';
     }
   } catch (e) {
     console.log('getAddGroupChange error: ', e);
@@ -395,10 +395,12 @@ async function getGroupDel(groupId) {
       evt.stopPropagation();
       // getReposDo
       // 添加状态变化
+      const winScrollY = window.scrollY;
       popupStatus.reposDoId = evt.target.dataset.id;
       dialogWrap.style.display = 'block';
-      dialogWrap.style.top = (window.scrollY + evt.y) + 'px';
-      dialogWrap.style.right = (400 - evt.x) + 'px';
+      dialogWrap.style.top = evt.pageY + 'px';
+      dialogWrap.style.right = (408 - evt.pageX) + 'px';
+      window.scrollTo(0, winScrollY);
       // TODO handler error ?
       return;
     }
